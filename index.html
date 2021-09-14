@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="footer.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Prata&family=Staatliches&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="ejercicio.js" type="text/javascript" defer></script>
+    <link rel="icon" href="imagen.ico" />
+    <title>Calculadora</title>
+  </head>
+  <body>
+    <!-- Aqui empieza el body -->
+    <header>
+      <h1 class="titulo">CALCULADORA JS</h1>
+    </header>
+
+    <main>
+      <div class="container">
+        <!-- Elemento contenedor -->
+        <div class="display">
+          <div id="valor-anterior">0</div>
+          <div id="valor-actual">0</div>
+        </div>
+
+        <div class="simbols">
+          <button id="+" class="simbolos" value="sumar">+</button>
+          <button id="-" class="simbolos" value="restar">-</button>
+          <button id="*" class="simbolos" value="multiplicar">*</button>
+          <button id="÷" class="simbolos" value="dividir">÷</button>
+          <button id="borrarBtn" onclick="display.borrar()">&larr;</button>
+          <button id="c" onclick="display.borrarTodo()">c</button>
+        </div>
+
+        <div class="num">
+          <div class="numeros">
+            <button class="numeroB">1</button>
+            <button class="numeroB">2</button>
+            <button class="numeroB">3</button>
+            <button class="numeroB">4</button>
+            <button class="numeroB">5</button>
+            <button class="numeroB">6</button>
+            <button class="numeroB">7</button>
+            <button class="numeroB">8</button>
+            <button class="numeroB">9</button>
+          </div>
+          <div>
+            <button id="igual" class="simbolos" value="igual">=</button>
+            <button id="nulo" class="numeroB">0</button>
+            <button id="punto" class="numeroB">.</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer__div">
+        <h3>Mas sobre mi trabajo</h3>
+        <div class="footer--links">
+          <div class="footer--links__1">
+            <a
+              href="https://www.linkedin.com/in/lucas-flores-5b7173187/"
+              target="blank"
+            >
+              <p>LinkedIn</p>
+              <img src="linkedIn.svg" alt="" />
+            </a>
+          </div>
+          <div class="footer--links__2">
+            <a href="https://github.com/lucashnan" target="blank">
+              <p>GitHub</p>
+              <img src="gitImage.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

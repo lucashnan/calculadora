@@ -1,103 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="footer.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
-      rel="stylesheet"
-    />
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Prata&family=Staatliches&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Fuente principal -->
+  <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
 
-    <script src="ejercicio.js" type="text/javascript" defer></script>
-    <link rel="icon" href="imagen.ico" />
-    <title>Calculadora</title>
-  </head>
-  <body>
-    <!-- Aqui empieza el body -->
-    <header>
-      <h1 class="titulo">CALCULADORA JS</h1>
-    </header>
+  <!-- Estilo embebido -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Staatliches', sans-serif;
+    }
 
-    <main>
-      <div class="container">
-        <!-- Elemento contenedor -->
-        <div class="display">
-          <div id="valor-anterior">0</div>
-          <div id="valor-actual">0</div>
+    body {
+      background: linear-gradient(135deg, #1e1e2f, #323246);
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header {
+      margin: 1rem;
+      text-align: center;
+    }
+
+    .titulo {
+      font-size: 2.5rem;
+      color: #ffffff;
+    }
+
+    .container {
+      background-color: #2e2e3e;
+      padding: 1rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      width: 320px;
+    }
+
+    .display {
+      background-color: #1c1c2b;
+      color: #0ef;
+      font-size: 2rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    #valor-anterior {
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+
+    .simbols, .numeros, .num > div {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .numeros {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .simbolos, .numeroB, #c, #borrarBtn, #igual, #punto {
+      padding: 1rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1.5rem;
+      background-color: #444;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .simbolos:hover, .numeroB:hover, #c:hover, #borrarBtn:hover, #igual:hover, #punto:hover {
+      background-color: #0ef;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    footer {
+      background-color: #1c1c2b;
+      color: #aaa;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .footer--links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .footer--links a {
+      color: #0ef;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer--links img {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media screen and (max-width: 400px) {
+      .container {
+        width: 90%;
+      }
+
+      .titulo {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <!-- Lógica de la calculadora -->
+  <script defer>
+    class Calculadora {
+      sumar(a, b) { return a + b; }
+      restar(a, b) { return a - b; }
+      multiplicar(a, b) { return a * b; }
+      dividir(a, b) { return a / b; }
+    }
+
+    class DisplayVisual {
+      constructor(displayValorAnterior, displayValorActual) {
+        this.displayValorAnterior = displayValorAnterior;
+        this.displayValorActual = displayValorActual;
+        this.calculador = new Calculadora();
+        this.tipoOperacion = undefined;
+        this.valorActual = '';
+        this.valorAnterior = '';
+        this.signos = {
+          sumar: '+',
+          restar: '-',
+          multiplicar: '*',
+          dividir: '÷',
+        };
+      }
+
+      borrar() {
+        this.valorActual = this.valorActual.toString().slice(0, -1);
+        this.mostrarNumero();
+      }
+
+      borrarTodo() {
+        this.valorActual = '';
+        this.valorAnterior = '';
+        this.tipoOperacion = undefined;
+        this.mostrarNumero();
+      }
+
+      agregarNumero(numero) {
+        if (numero === '.' && this.valorActual.includes('.')) return;
+        this.valorActual = this.valorActual.toString() + numero.toString();
+        this.mostrarNumero();
+      }
+
+      mostrarNumero() {
+        this.displayValorActual.textContent = this.valorActual;
+        this.displayValorAnterior.textContent = `${this.valorAnterior} ${this.signos[this.tipoOperacion] || ''}`;
+      }
+
+      calcular() {
+        const valorAnterior = parseFloat(this.valorAnterior);
+        const valorActual = parseFloat(this.valorActual);
+        if (isNaN(valorActual) || isNaN(valorAnterior)) return;
+        this.valorActual = this.calculador[this.tipoOperacion](valorAnterior, valorActual);
+      }
+
+      computar(tipo) {
+        this.tipoOperacion !== 'igual' && this.calcular();
+        this.tipoOperacion = tipo;
+        this.valorAnterior = this.valorActual || this.valorAnterior;
+        this.valorActual = '';
+        this.mostrarNumero();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const displayValorAnterior = document.getElementById('valor-anterior');
+      const displayValorActual = document.getElementById('valor-actual');
+      const botonesNumero = document.querySelectorAll('.numeroB');
+      const botonesOperadores = document.querySelectorAll('.simbolos');
+      window.display = new DisplayVisual(displayValorAnterior, displayValorActual);
+
+      botonesNumero.forEach(boton =>
+        boton.addEventListener('click', () => display.agregarNumero(boton.innerHTML))
+      );
+
+      botonesOperadores.forEach(boton => {
+        boton.addEventListener('click', () => display.computar(boton.value));
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1 class="titulo">CALCULADORA JS</h1>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="display">
+        <div id="valor-anterior">0</div>
+        <div id="valor-actual">0</div>
+      </div>
+
+      <div class="simbols">
+        <button class="simbolos" value="sumar">+</button>
+        <button class="simbolos" value="restar">-</button>
+        <button class="simbolos" value="multiplicar">*</button>
+        <button class="simbolos" value="dividir">÷</button>
+        <button id="borrarBtn" onclick="display.borrar()">←</button>
+        <button id="c" onclick="display.borrarTodo()">C</button>
+      </div>
+
+      <div class="num">
+        <div class="numeros">
+          <button class="numeroB">1</button>
+          <button class="numeroB">2</button>
+          <button class="numeroB">3</button>
+          <button class="numeroB">4</button>
+          <button class="numeroB">5</button>
+          <button class="numeroB">6</button>
+          <button class="numeroB">7</button>
+          <button class="numeroB">8</button>
+          <button class="numeroB">9</button>
         </div>
-
-        <div class="simbols">
-          <button id="+" class="simbolos" value="sumar">+</button>
-          <button id="-" class="simbolos" value="restar">-</button>
-          <button id="*" class="simbolos" value="multiplicar">*</button>
-          <button id="÷" class="simbolos" value="dividir">÷</button>
-          <button id="borrarBtn" onclick="display.borrar()">&larr;</button>
-          <button id="c" onclick="display.borrarTodo()">c</button>
-        </div>
-
-        <div class="num">
-          <div class="numeros">
-            <button class="numeroB">1</button>
-            <button class="numeroB">2</button>
-            <button class="numeroB">3</button>
-            <button class="numeroB">4</button>
-            <button class="numeroB">5</button>
-            <button class="numeroB">6</button>
-            <button class="numeroB">7</button>
-            <button class="numeroB">8</button>
-            <button class="numeroB">9</button>
-          </div>
-          <div>
-            <button id="igual" class="simbolos" value="igual">=</button>
-            <button id="nulo" class="numeroB">0</button>
-            <button id="punto" class="numeroB">.</button>
-          </div>
+        <div>
+          <button id="igual" class="simbolos" value="igual">=</button>
+          <button id="nulo" class="numeroB">0</button>
+          <button id="punto" class="numeroB">.</button>
         </div>
       </div>
-    </main>
-    <footer>
-      <div class="footer__div">
-        <h3>Mas sobre mi trabajo</h3>
-        <div class="footer--links">
-          <div class="footer--links__1">
-            <a
-              href="https://www.linkedin.com/in/lucas-flores-5b7173187/"
-              target="blank"
-            >
-              <p>LinkedIn</p>
-              <img src="linkedIn.svg" alt="" />
-            </a>
-          </div>
-          <div class="footer--links__2">
-            <a href="https://github.com/lucashnan" target="blank">
-              <p>GitHub</p>
-              <img src="gitImage.svg" alt="" />
-            </a>
-          </div>
-        </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <h3>Más sobre mi trabajo</h3>
+      <div class="footer--links">
+        <a href="https://www.linkedin.com/in/lucas-flores-5b7173187/" target="_blank">
+          <p>LinkedIn</p>
+          <img src="linkedIn.svg" alt="LinkedIn" />
+        </a>
+        <a href="https://github.com/lucashnan" target="_blank">
+          <p>GitHub</p>
+          <img src="gitImage.svg" alt="GitHub" />
+        </a>
       </div>
-    </footer>
-  </body>
+    </div>
+  </footer>
+</body>
 </html>
